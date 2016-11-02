@@ -1,0 +1,105 @@
+#!/bin/bash
+
+###Anonsurf IP Rotator By Perseverance###
+###AnonSurf by Parrotsec
+###Tor-Buddy by AfterBurn @ NetSecNow
+
+export BLK='\e[1;30m'
+export DRKGRY='\e[1;90m'
+export PRPL='\e[1;35m'
+export BLUE='\e[1;94m'
+export UBLUE='\e[1;4;94m'
+export GRAY='\e[1;30m'
+export GREEN='\e[1;92m'
+export RED='\e[1;91m'
+export RC='\e[00m'
+
+echo -e "  												"
+echo -e "  												"
+echo -e "$RED  												"
+echo -e "      █ ▄▄  ▄███▄   █▄▄▄▄   ▄▄▄▄▄   ▄███▄      ▄   ▄███▄   █▄▄▄▄ ██      ▄   ▄█▄    ▄███▄   	"
+echo -e "      █   █ █▀   ▀  █  ▄▀  █     ▀▄ █▀   ▀      █  █▀   ▀  █  ▄▀ █ █      █  █▀ ▀▄  █▀   ▀  	"
+echo -e "      █▀▀▀  ██▄▄    █▀▀▌ ▄  ▀▀▀▀▄   ██▄▄   █     █ ██▄▄    █▀▀▌  █▄▄█ ██   █ █   ▀  ██▄▄   	"
+echo -e "      █     █▄   ▄▀ █  █  ▀▄▄▄▄▀    █▄   ▄▀ █    █ █▄   ▄▀ █  █  █  █ █ █  █ █▄  ▄▀ █▄   ▄▀ 	"
+echo -e "       █    ▀███▀     █             ▀███▀    █  █  ▀███▀     █      █ █  █ █ ▀███▀  ▀███▀   	"
+echo -e "        ▀            ▀                        █▐            ▀      █  █   ██                	"
+echo -e "                                              ▐                   ▀                    $RC	"
+echo -e "      												"
+echo -e "  				   $RED-SEE NO EVIL-$RC						"
+echo -e "  												" 	
+
+### Anonsurf Check Install ###
+
+echo -e " $GREEN*$UBLUE Is Anonsurf installed? $RC\n"
+AS="/etc/init.d/anonsurf"
+
+
+if [ -f $AS ];
+then
+echo -e " $DRKGRY[$GREEN i$DRKGRY ]$PRPL   Hell Yeah Anonsurf is Installed! $RC\n"
+echo -e " $DRKGRY[$GREEN i$DRKGRY ]$RED   Starting Anonsurf! :D $RC\n"
+service anonsurf start
+else
+echo -e " $DRKGRY[$RED X$DRKGRY ]$RED Anonsurf is not installed... fail.. -_- $RC\n"
+echo -e " git clone https://github.com/Und3rf10w/kali-anonsurf.git ~/opt $RC\n"
+exit 
+fi
+
+### Check if I2P is installed ###
+if [ -f $I2P ];
+then
+echo -e " $GREEN*$UBLUE Is I2P Installed? $RC\n"
+echo -e " $DRKGRY[$GREEN i$DRKGRY ]$PRPL   Hell Yeah I2P is Installed! $RC\n"
+echo -e " $DRKGRY[$GREEN i$DRKGRY ]$RED   I2P started! :D $RC\n"
+else
+echo -e " $DRKGRY[$RED X$DRKGRY ]$GRAY I2P is not Installed.. -_- $RC"
+echo -e " $RED apt-get install i2p $RC\n"
+exit
+fi
+
+### ProxyChains Check Install###
+echo -e " $GREEN*$UBLUE Is Proxychains Installed? $RC\n"
+PC="/etc/proxychains.conf"
+
+
+if [ -f $PC ];
+then
+echo -e " $DRKGRY[$GREEN i$DRKGRY ]$PRPL   Hell Yeah Proxychains is Installed! $RC\n"
+else
+echo -e " $DRKGRY[$RED X$DRKGRY ]$GRAY   Proxychains is not installed.. -_- $RC\n"
+echo -e " $RED apt-get install proxychains $RC\n"
+exit
+fi
+
+## Timeout setup to change Anonsurf IP in Seconds.
+echo -e " $GREEN*$UBLUE How many seconds you wanna post up on this IP, son? $RC\n"
+read TIME
+
+if [ "$TIME" -lt "30" ];
+then
+echo -e " $DRKGRY[$RED X$DRKGRY ]$RED WARNING! $BLUE Less than 30 seconds will fuck shit up and time your shit out! $RC\n"
+echo -e " $GREEN But... we give no shits. So if you have issues, restart script. Have a nice day :D $RC\n"
+else
+echo -e " $DRKGRY[$GREEN i$DRKGRY ]$BLUE   Setting up timer $RC\n"
+fi
+
+function control_c {
+echo -en " \n$RED NO COME BACK! YOU STILL GOT SHIT TO HACK!! $RC\n"
+service anonsurf stop
+echo -en " $BLUE Fiiiinnneeeee... I'll let it slide THIS time :P $RC\n"
+echo -en " $DRKGRY[$GREEN i$DRKGRY ]$GREEN Anonsurf has been stopped. You are no longer in the Anon bubble of AwEsOmEnEsS! $RC\n"
+exit $?
+}
+
+## Capture SIGINT (Ctrl-C) clean shit up and ROLL OUT!
+trap control_c SIGINT
+
+for (( ; ; )) 
+do
+sleep $TIME
+anonsurf change
+echo -e " $DRKGRY[$GREEN i$DRKGRY ] $RED$TIME$RED Seconds until next IP Change $RC\n"
+##uncomment to view ip after every change.
+#anonsurf myip
+#echo -e " $GREEN*$BLUE Here is your current node if you even give a shit... LOL! $RC\n"
+done
